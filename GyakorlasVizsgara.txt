@@ -1,0 +1,64 @@
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan serve
+
+DB_DATABASE=Gyakorlas
+user migration-ba
+
+Schema::create('users', function (Blueprint $table) {
+            $table->increments('id'); 
+            $table->string('name');
+            $table->string('password');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+php artisan make:model Bejegyzesek -m
+
+Schema::create('bejegyzeseks', function (Blueprint $table) {
+            $table->increments('id'); 
+            $table->integer('tevekenyseg_id')->unsigned(); 		
+	        $table->foreign('tevekenyseg_id')->references('tevekenyseg_id')->on('tevekenysegs');
+            $table->string('osztaly_id');
+            $table->string('allapot');
+            $table->timestamps();
+        });
+
+Modell be->protected $fillable = ['tevekenyseg_id', 'osztaly_id', 'allapot'];
+
+php artisan make:model Tevekenyseg -m
+
+Schema::create('tevekenysegs', function (Blueprint $table) {
+            $table->increments('tevekenyseg_id'); 
+            $table->string('tevekenyseg_nev');
+	        $table->integer('pontszam');
+            $table->string('osztaly_id');
+            $table->timestamps();
+        });
+
+
+Modell be->protected $fillable = ['tevekenyseg_nev', 'pontszam', 'osztaly_id'];
+
+INSERT INTO `tevekenysegs`(`tevekenyseg_nev`, `pontszam`) VALUES ('rollerrel jöttem iskolába',3),
+('10 km-t gyalogoltam buszozás helyett',10),
+('ültettem fát',3),
+('ültettem virágot',4),
+('ültettem egyéb növényt',5),
+('kevesebb vizet használtam a fürdéshez',6),
+('összeszedtem a szemetet egy közterületen,',7),
+('tartós szatyorba vásároltam, nem nylonba',8),
+('nem használtam egyszer használatos műanyagot',10),
+('tartós csomagolású terméket vásároltam pl üvegbe vettem a tejet, nem használtam pet palackot',11),
+('környezetbarát csomagolású terméket vásároltam',12),
+('kevesebb húst ettem a héten',13),
+('ökológiai gazdaságból származó élelmiszert vettem',14),
+('kirándultam, szabadban töltöttem időt a héten',15),
+('kevesebb ruhát/terméket vásároltam a héten, hogy fenntarthatóbb legyen a környeztünk!',16),
+('önkénteskedtem a Greenpeace-nél, vagy más zöld szervezetnél',18)
+
+php artisan optimize
+php artisan migrate 
